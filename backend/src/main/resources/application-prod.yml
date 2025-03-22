@@ -1,22 +1,22 @@
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${GREEN_DB_URL}/forest?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-    username: ${GREEN_DB_USERNAME}
-    password: ${GREEN_DB_PASSWORD}
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${GREEN_DB_URL}/forest?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+#    username: ${GREEN_DB_USERNAME}
+#    password: ${GREEN_DB_PASSWORD}
 #    driver-class-name: org.mariadb.jdbc.Driver
 #    url: ${SSAFY_DB_URL}
 #    username: ${SSAFY_DB_USERNAME}
 #    password: ${SSAFY_DB_PASSWORD}
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: warn
-        type:
-          descriptor:
-            sql: trace
+#
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: warn
+#        type:
+#          descriptor:
+#            sql: trace

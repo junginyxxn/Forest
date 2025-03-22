@@ -1,62 +1,92 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.2'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '17'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(22)
     }
+    sourceCompatibility = JavaVersion.VERSION_22
+    targetCompatibility = JavaVersion.VERSION_22
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.2.0'
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    implementation 'javax.xml.bind:jaxb-api:2.3.0'
-    implementation 'javax.persistence:javax.persistence-api:2.2'
-    implementation 'org.hibernate:hibernate-core:6.4.1.Final'
-    implementation 'org.hibernate:hibernate-jpamodelgen:6.4.1.Final'
+sourceSets {
+    main.java.srcDir("build/generated/sources/annotationProcessor/java/main")
+}
 
+dependencies {
+    // Spring Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+    // Spring Data JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Spring Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    // QueryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    implementation 'com.querydsl:querydsl-spatial:5.1.0'
+    implementation 'com.querydsl:querydsl-sql-spatial'
+    // QueryDSL Annotation Processor
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-spatial:5.1.0'
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // Devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // Oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    // Spring Boot Starter Thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    // Websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.4'
-    implementation 'com.google.code.gson:gson:2.9.0'
-
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    // Spring Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
 
+configurations {
+    resolvableCompileOnly {
+        canBeResolved = true
+        canBeConsumed = false
+        extendsFrom compileOnly
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.named("jar") {
-    enabled = false
+tasks.withType(JavaCompile).configureEach {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+tasks.withType(Jar).configureEach {
+    enabled = true
 }
