@@ -3,7 +3,6 @@ server:
     encoding:
       force: true
       charset: UTF-8
-  port: 8081
 
 spring:
   servlet:
@@ -14,18 +13,15 @@ spring:
   profiles:
     active: local
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/forest?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
-    username: ${LOCAL_MYSQL_USERNAME}
-    password: ${LOCAL_MYSQL_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:15432/postgres
+    username: ${LOCAL_POSTGRESQL_USERNAME}
+    password: ${LOCAL_POSTGRESQL_PASSWORD}
   jpa:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-      format_sql: true
-      use_sql_comments: true
-      highlight_sql: true
-    database: mysql
+      show-sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
